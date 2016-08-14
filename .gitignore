@@ -1,0 +1,12 @@
+#Ignore objects and archives
+*.o
+*.a
+
+#Ignore binaries
+*.bin
+
+#Ignore Cargo files
+*.lock
+.cargo-lock
+
+target/*
