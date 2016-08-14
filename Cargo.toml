@@ -1,0 +1,17 @@
+[package]
+name = "rich_os"
+version = "0.0.1"
+authors = ["Richard Scott <richard@hasac.at"]
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+rlibc = "1.0"
+spin = "0.3.4"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

@@ -13,6 +13,11 @@ start:
     call set_up_page_tables
     call enable_paging
 
+    ; Set up SSE, rust automatically uses SSE when floats are involved
+    ; Disabled here since interrupts mean saving the SSE state, lots of overhead.
+    ; Plus who needs float in a kernal?
+;    call set_up_SSE
+
     ;load gdt
     lgdt [gdt64.pointer]
 
@@ -21,6 +26,7 @@ start:
     mov ss, ax
     mov ds, ax
     mov es, ax
+
 
     jmp gdt64.code:long_mode_start
 
@@ -134,6 +140,28 @@ enable_paging:
     mov cr0, eax
 
     ret
+
+; Check for SSE and enable it. If it's not supported throw error "a".
+set_up_SSE:
+    ; check for SSE
+    mov eax, 0x1
+    cpuid
+    test edx, 1<<25
+    jz .no_SSE
+
+    ; enable SSE
+    mov eax, cr0
+    and ax, 0xFFFB      ; clear coprocessor emulation CR0.EM
+    or ax, 0x2          ; set coprocessor monitoring  CR0.MP
+    mov cr0, eax
+    mov eax, cr4
+    or ax, 3 << 9       ; set CR4.OSFXSR and CR4.OSXMMEXCPT at the same time
+    mov cr4, eax
+
+    ret
+.no_SSE:
+    mov al, "a"
+    jmp error
 
 ok:
     ; print `OK` to screen
