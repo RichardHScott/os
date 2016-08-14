@@ -6,6 +6,10 @@ bits 32
 start:
     ;set up stack for initial error checking
     mov esp, stack_top
+
+    ;move multiboot info ptr into edi
+    mov edi, ebx
+
     call check_multiboot
     call check_cpuid
     call check_long_mode
@@ -15,8 +19,8 @@ start:
 
     ; Set up SSE, rust automatically uses SSE when floats are involved
     ; Disabled here since interrupts mean saving the SSE state, lots of overhead.
-    ; Plus who needs float in a kernal?
-;    call set_up_SSE
+    ; This is needed for the panic! macro to work
+    call set_up_SSE
 
     ;load gdt
     lgdt [gdt64.pointer]
@@ -26,7 +30,6 @@ start:
     mov ss, ax
     mov ds, ax
     mov es, ax
-
 
     jmp gdt64.code:long_mode_start
 
@@ -186,9 +189,9 @@ p3_table:
     resb 4096
 p2_table:
     resb 4096
-;reserve 64 bytes for our initial stack
+
 stack_bottom:
-    resb 64
+    resb 4096
 stack_top:
 
 section .rodata
