@@ -47,6 +47,8 @@ pub extern fn rust_main(multiboot_information_address: usize) {
             section.addr, section.size, section.flags);
     }
 
+    panic!("at the disco!");
+
     loop {}
 }
 

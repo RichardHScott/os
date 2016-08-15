@@ -20,7 +20,7 @@ start:
     ; Set up SSE, rust automatically uses SSE when floats are involved
     ; Disabled here since interrupts mean saving the SSE state, lots of overhead.
     ; This is needed for the panic! macro to work
-    call set_up_SSE
+    ;call set_up_SSE
 
     ;load gdt
     lgdt [gdt64.pointer]

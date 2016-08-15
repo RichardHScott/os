@@ -1,7 +1,7 @@
 arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
-target ?= $(arch)-unknown-linux-gnu
+target ?= $(arch)-unknown-none-gnu
 rust_os := target/$(target)/debug/librich_os.a
 
 linker_script := src/arch/$(arch)/linker.ld
