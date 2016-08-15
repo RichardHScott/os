@@ -1,6 +1,7 @@
 ENTRY(start)
 
 SECTIONS {
+    /*entry at 1M to avoid clobbering low address memory such as VGA at 0xb8000 */
     . = 1M;
 
     .boot :

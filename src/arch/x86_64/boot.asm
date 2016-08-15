@@ -20,7 +20,11 @@ start:
     ; Set up SSE, rust automatically uses SSE when floats are involved
     ; Disabled here since interrupts mean saving the SSE state, lots of overhead.
     ; This is needed for the panic! macro to work
-    ;call set_up_SSE
+
+    ; Rebuilt libcore with SEE code generation remove.
+    ; Re-enable SSE here, but need to be careful that `rustc` doesn't change the target and start 
+    ; generating code that has SSE enabled in the kernel.
+    call set_up_SSE
 
     ;load gdt
     lgdt [gdt64.pointer]
@@ -31,6 +35,7 @@ start:
     mov ds, ax
     mov es, ax
 
+    ; long jmp to set up the code segment
     jmp gdt64.code:long_mode_start
 
     call ok

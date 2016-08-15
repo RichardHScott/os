@@ -1,17 +1,20 @@
 [package]
 name = "rich_os"
 version = "0.0.1"
-authors = ["Richard Scott <richard@hasac.at"]
+authors = ["Richard Scott <richard@hasac.at>"]
 
 [lib]
 crate-type = ["staticlib"]
 
 [dependencies]
-rlibc = "1.0"
+#rlibc = "1.0"
 spin = "0.3.4"
 
 [dependencies.multiboot2]
 git = "https://github.com/phil-opp/multiboot2-elf64"
+
+[dependencies.rlibc]
+path="rlibc"
 
 [profile.dev]
 panic = "abort"
