@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 pub unsafe fn outb(value: u8, port: u16) {
     asm!("outb %al, %dx" ::
          "{dx}"(port), "{al}"(value) ::
@@ -55,32 +57,32 @@ pub trait InOut {
 }
 
 impl InOut for u8 {
-    unsafe fn port_in(port : u16) -> Self {
-        inb(self.port)
+    unsafe fn port_in(port : u16) -> u8 {
+        inb(port)
     }
 
-    unsafe pub fn port_out(&mut self, value : u8) {
-        outb(value, self.port) }
+    unsafe fn port_out(port : u16, value : u8) {
+        outb(value, port)
     }
 }
 
 impl InOut for u16 {
-    unsafe fn port_in(port : u16) -> Self {
-        inw(self.port) }
+    unsafe fn port_in(port : u16) -> u16 {
+        inw(port)
     }
 
-    unsafe pub fn port_out(&mut self, value : u16) {
-        outw(value, self.port) }
+    unsafe fn port_out(port : u16, value : u16) {
+        outw(value, port)
     }
 }
 
 impl InOut for u32 {
-    unsafe fn port_in(port : u32) -> Self {
-        inl(self.port) }
+    unsafe fn port_in(port : u16) -> u32 {
+        inl(port)
     }
 
-    unsafe pub fn port_out(&mut self, value : u32) {
-        outl(value, self.port) }
+    unsafe fn port_out(port : u16, value : u32) {
+        outl(value, port)
     }
 }
 
@@ -89,16 +91,16 @@ pub struct Port<T : InOut> {
     phantom : PhantomData<T>,
 }
 
-impl< : InOut> Port<T> {
+impl<T : InOut> Port<T> {
     pub unsafe fn new(port : u16) -> Port<T> {
         Port { port : port, phantom : PhantomData }
     }
 
-    pub fn read(&mut self) -> T {
+    pub unsafe fn read(&mut self) -> T {
         T::port_in(self.port)
     }
 
-    pub fn write(&mut self, value : T) {
+     pub unsafe fn write(&mut self, value : T) {
         T::port_out(self.port, value)
     }
 }
