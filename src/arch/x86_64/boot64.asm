@@ -5,6 +5,8 @@ section .text
 bits 64
 
 long_mode_start:
+    call ok
+
     mov rax, 0x2f592f412f4b2f4f
     mov qword [0xb8000], rax
 
@@ -15,9 +17,7 @@ long_mode_start:
 ok:
     ; print `OK` to screen
     mov dword [0xb8000], 0x2f4b2f4f
-    mov dword [0xb8004], 0x2f4f2f50
-    mov dword [0xb8008], 0x2f502f4f
-    hlt
+    ret
 error:
     ;print 'ERR: ' to screen
     ;followed by error code in al (which is in ascii)

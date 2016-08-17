@@ -31,14 +31,14 @@ start:
 
     ;udpate data selector
     mov ax, gdt64.data
+
     mov ss, ax
     mov ds, ax
     mov es, ax
-
     ; long jmp to set up the code segment
     jmp gdt64.code:long_mode_start
 
-    call ok
+    call error
 
 check_multiboot:
     cmp eax, 0x36d76289
@@ -174,9 +174,8 @@ set_up_SSE:
 ok:
     ; print `OK` to screen
     mov dword [0xb8000], 0x2f4b2f4f
-    mov dword [0xb8004], 0x2f4f2f50
-    mov dword [0xb8008], 0x2f502f4f
-    hlt
+    ret
+
 error:
     ;print 'ERR: ' to screen
     ;followed by error code in al (which is in ascii)
@@ -185,19 +184,6 @@ error:
     mov dword [0xb8008], 0x4f204f20
     mov byte [0xb800c], al
     hlt
-
-section .bss
-align 4096
-p4_table:
-    resb 4096
-p3_table:
-    resb 4096
-p2_table:
-    resb 4096
-
-stack_bottom:
-    resb 4096
-stack_top:
 
 section .rodata
 gdt64:
@@ -209,3 +195,16 @@ gdt64:
 .pointer:
     dw $ - gdt64 - 1
     dq gdt64
+
+section .bss
+align 4096
+p4_table:
+    resb 4096
+p3_table:
+    resb 4096
+p2_table:
+    resb 4096
+
+stack_bottom:
+    resb 1024
+stack_top:

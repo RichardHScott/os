@@ -7,7 +7,6 @@ authors = ["Richard Scott <richard@hasac.at>"]
 crate-type = ["staticlib"]
 
 [dependencies]
-#rlibc = "1.0"
 spin = "0.3.4"
 
 [dependencies.multiboot2]
@@ -15,6 +14,9 @@ git = "https://github.com/phil-opp/multiboot2-elf64"
 
 [dependencies.rlibc]
 path="rlibc"
+
+[dependencies.irq_handler]
+path="irq_handler"
 
 [profile.dev]
 panic = "abort"
