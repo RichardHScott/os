@@ -1,0 +1,34 @@
+qemu docs
+http://wiki.qemu.org/download/qemu-doc.html
+
+useful commands
+info registers
+info irq
+
+x <memory address, need 0x for hex>
+
+Dump the disassembly of a file
+objdump -d <bin>
+
+Running qemu
+qemu-system-x86_64.exe -d int -no-reboot -cdrom  C:\Users\richard\Dropbox\os\build\os-x86_64.iso
+
+
+i_ok has structure 
+0000 0000 0010 00d9
+so we are putting in
+
+00d9
+
+0010
+
+0000 0000
+
+
+0001 00d9 1000 8e00 0000 0010 0000 0000
+                              --zeroes-
+                    ---------
+
+
+
+00000000001000d9

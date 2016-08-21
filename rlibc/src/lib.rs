@@ -12,3 +12,15 @@ pub unsafe extern fn memcpy(destination : *mut u8, source : *const u8, num : usi
 
     i
 }
+
+#[no_mangle]
+pub unsafe extern fn memset(destination: *mut u8, value : u8, num : usize) -> *const u8 {
+    let mut i = 0;
+
+    while i < num {
+        *destination.offset(i as isize) = value;
+        i += 1;
+    }
+
+    destination
+}

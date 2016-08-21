@@ -35,6 +35,8 @@ start:
     mov ss, ax
     mov ds, ax
     mov es, ax
+    mov fs, ax
+    mov gs, ax
     ; long jmp to set up the code segment
     jmp gdt64.code:long_mode_start
 
@@ -129,6 +131,8 @@ set_up_page_tables:
 enable_paging:
     ; load cr3 with the p4 'root' page table
     mov eax, p4_table
+    or eax, 0b11 ; present + writable
+    mov [p4_table + 511*8], eax ; set up recursion of p4 table, last entry points to itself as present + writable
     mov cr3, eax
 
     ; enable PAE
@@ -206,5 +210,5 @@ p2_table:
     resb 4096
 
 stack_bottom:
-    resb 1024
+    resb 4096*2
 stack_top:

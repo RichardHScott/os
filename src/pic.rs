@@ -111,7 +111,7 @@ impl ChainedPics {
         self.pics[1].data.write(pic_2_mask);
         io_wait();
 
-        start_interrupts();
+        //start_interrupts();
     }
 
     pub fn handles_interrupt(&self, interrupt_id: u8) -> bool {
